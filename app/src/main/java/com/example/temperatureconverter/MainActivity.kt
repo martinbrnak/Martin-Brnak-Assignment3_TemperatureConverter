@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textFahrenheitValue: TextView
     private lateinit var textInterestingMessage: TextView
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,22 +27,21 @@ class MainActivity : AppCompatActivity() {
         textFahrenheitValue = findViewById(R.id.textFahrenheitValue)
         textInterestingMessage = findViewById(R.id.textInterestingMessage)
 
-        // Set seekbar ranges
         seekBarCelsius.max = 100
         seekBarFahrenheit.max = 212
 
-        seekBarCelsius.min = 0
-        seekBarFahrenheit.min = 32
+
 
 
         // Initial values
-        updateSeekBarValues(1, celsiusToFahrenheit(1))
+        updateSeekBarCelsius(0)
+        updateSeekBarFahrenheit(32)
 
         // Celsius seekbar listener
         seekBarCelsius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val fahrenheit = celsiusToFahrenheit(progress)
-                updateSeekBarValues(progress, fahrenheit)
+                updateSeekBarFahrenheit(fahrenheit)
                 updateInterestingMessage(progress)
             }
 
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                     seekBarFahrenheit.progress = 32  // Snap back to 32ºF
                 } else {
                     val celsius = fahrenheitToCelsius(progress)
-                    updateSeekBarValues(celsius, progress)
+                    updateSeekBarCelsius(celsius)
                     updateInterestingMessage(celsius)
                 }
             }
@@ -69,10 +68,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun updateSeekBarValues(celsius: Int, fahrenheit: Int) {
-        textCelsiusValue.text = "$celsius°C"
-        textFahrenheitValue.text = "$fahrenheit°F"
+    private fun updateSeekBarCelsius(celsius: Int) {
+        textCelsiusValue.text = "$celsius"
         seekBarCelsius.progress = celsius
+    }
+
+    private fun updateSeekBarFahrenheit(fahrenheit: Int){
+        textFahrenheitValue.text = "$fahrenheit"
         seekBarFahrenheit.progress = fahrenheit
     }
 
